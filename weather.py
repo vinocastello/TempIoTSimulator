@@ -16,7 +16,8 @@ class WEATHER_DATA:
         self.__max_temp = KelvinToCelsius(data['main']['temp_max'])
         self.__min_temp = KelvinToCelsius(data['main']['temp_min'])
         self.__random_temp = round(random.uniform(self.__min_temp,self.__max_temp),2)
-        self.__timestamp = datetime.datetime.now()
+        self.__timestamp = data['dt']
+        self.__location = data['name']
     
     @property
     def humidity(self):
@@ -44,10 +45,15 @@ class WEATHER_DATA:
 
     @property
     def timestamp(self):
-        return self.__timestamp.strftime('%Y-%m-%d %H:%M:%S')
+        temp = datetime.datetime.fromtimestamp(self.__timestamp)
+        return temp.strftime('%Y-%m-%d %H:%M:%S')
+
+    @property
+    def location(self):
+        return self.__location
 
     def show(self):
-        print(f"Temperature: {self.__temp} °C\nTemp range: {self.__min_temp} - {self.__max_temp}°C\nPressure: {self.__pressure} Pa\nHumidity: {self.__humidity}%")
+        print(f"Timestamp: {self.timestamp}\nLocation: {self.__location}\nTemperature: {self.__temp} °C\nTemp range: {self.__min_temp} - {self.__max_temp}°C\nPressure: {self.__pressure} Pa\nHumidity: {self.__humidity}%")
 
 def get_weather(loc):
     my_api_key = "05ee991c43ccaeba6a9221e4c2b2b5da"
@@ -55,3 +61,5 @@ def get_weather(loc):
     res = requests.get(url)
     data = res.json()
     return WEATHER_DATA(data)
+
+get_weather(LOCATION).show()
