@@ -62,4 +62,12 @@ def get_weather(loc):
     data = res.json()
     return WEATHER_DATA(data)
 
+def get_random_temp(loc,n):
+    random_temps = []
+    for i in range(n):
+        wt = get_weather(loc)
+        random_temp = random.uniform(wt.min_temp,wt.max_temp)
+        random_temps.append(random_temp)
+    return random_temps
+
 get_weather(LOCATION).show()
