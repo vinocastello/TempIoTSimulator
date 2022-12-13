@@ -64,8 +64,8 @@ def get_weather(loc):
 
 def get_random_temp(loc,n):
     random_temps = []
+    wt = get_weather(loc)
     for i in range(n):
-        wt = get_weather(loc)
         random_temp = random.uniform(wt.min_temp,wt.max_temp)
         random_temps.append(random_temp)
     return random_temps
