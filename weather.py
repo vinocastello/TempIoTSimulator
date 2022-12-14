@@ -15,7 +15,6 @@ class WEATHER_DATA:
         self.__temp = KelvinToCelsius(data['main']['temp'])
         self.__max_temp = KelvinToCelsius(data['main']['temp_max'])
         self.__min_temp = KelvinToCelsius(data['main']['temp_min'])
-        self.__random_temp = round(random.uniform(self.__min_temp,self.__max_temp),2)
         self.__timestamp = data['dt']
         self.__location = data['name']
     
@@ -39,9 +38,17 @@ class WEATHER_DATA:
     def min_temp(self):
         return self.__min_temp
 
-    @property
-    def random_temp(self):
-        return self.__random_temp
+    def get_random_temp(self,percentage_of_error):
+        random_temp = None
+        choices = [0,1]
+        weight = [percentage_of_error,1 - percentage_of_error]
+        decision = random.choices(choices,weight)[0]
+        if decision == 0:
+            random_temp = round(random.uniform(-self.max_temp,self.max_temp),2)
+            # random_temp = 3
+        elif decision == 1:
+            random_temp = round(random.uniform(self.__min_temp,self.__max_temp),2)
+        return random_temp
 
     @property
     def timestamp(self):
@@ -70,4 +77,5 @@ def get_random_temp(loc,n):
         random_temps.append(random_temp)
     return random_temps
 
-get_weather(LOCATION).show()
+sample = get_weather(LOCATION)
+sample.show()
